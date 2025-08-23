@@ -48,13 +48,13 @@ export function ChatInput({ onSubmit, isLoading }: ChatInputProps) {
         onKeyDown={handleKeyDown}
         placeholder={translations.sendMessagePlaceholder}
         rows={1}
-        className="min-h-[48px] resize-none rounded-2xl border-border/80 bg-background/70 pr-16 shadow-sm focus-visible:ring-1 focus-visible:ring-primary/60"
+        className="min-h-[48px] resize-none rounded-2xl border-border/80 bg-background/70 pr-16 shadow-sm transition-shadow duration-300 focus-visible:ring-1 focus-visible:ring-primary/60 focus:shadow-lg"
         disabled={isLoading}
       />
       <Button
         type="submit"
         size="icon"
-        className="absolute bottom-2 right-2 h-9 w-9 rounded-full"
+        className="absolute bottom-2 right-2 h-9 w-9 rounded-full transition-transform duration-300 hover:scale-110 active:scale-95"
         disabled={isLoading || !input.trim()}
         aria-label={translations.sendMessage}
       >

@@ -1,6 +1,6 @@
 import { Bot, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { FrezeerLogo } from '../icons';
 
 export interface ChatMessageProps {
@@ -14,12 +14,12 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
   return (
     <div
       className={cn(
-        'flex items-start gap-3 animate-in fade-in',
+        'flex items-start gap-3 animate-slide-up-and-fade-in',
         isUser ? 'justify-end' : 'justify-start'
       )}
     >
       {!isUser && (
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-8 w-8 transition-transform duration-300 hover:scale-110">
             <AvatarFallback className='bg-primary/20'>
                 <FrezeerLogo className="h-5 w-5 text-primary" />
             </AvatarFallback>
@@ -27,16 +27,16 @@ export function ChatMessage({ role, content }: ChatMessageProps) {
       )}
       <div
         className={cn(
-          'max-w-[80%] rounded-2xl p-3 text-sm md:text-base',
+          'max-w-[80%] rounded-2xl p-3 text-sm shadow-md transition-all duration-300 md:text-base',
           isUser
-            ? 'rounded-br-none bg-primary text-primary-foreground'
-            : 'rounded-bl-none bg-muted'
+            ? 'rounded-br-none bg-primary text-primary-foreground hover:shadow-lg'
+            : 'rounded-bl-none bg-muted hover:shadow-lg'
         )}
       >
         <p className="whitespace-pre-wrap">{content}</p>
       </div>
       {isUser && (
-        <Avatar className="h-8 w-8">
+        <Avatar className="h-8 w-8 transition-transform duration-300 hover:scale-110">
           <AvatarFallback>
             <User className="h-5 w-5" />
           </AvatarFallback>
