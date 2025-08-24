@@ -6,8 +6,6 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarTrigger,
 } from '@/components/ui/sidebar';
 import { FrezeerLogo } from '@/components/icons';
 import { useLanguage } from '@/hooks/use-language';
@@ -24,8 +22,6 @@ export function AppSidebar() {
            <h1 className="text-xl font-bold tracking-tighter text-foreground group-data-[collapsible=icon]:hidden">
               {translations.appName}
             </h1>
-          <div className="flex-1" />
-          <SidebarTrigger className="hidden md:flex" />
         </div>
       </SidebarHeader>
       <SidebarContent>

@@ -47,7 +47,7 @@ export function ChatPanel() {
 
   return (
     <div className="relative flex h-full max-h-screen flex-1 flex-col">
-       <div className="absolute left-4 top-4 z-10 md:hidden">
+       <div className="absolute left-4 top-4 z-10">
           <SidebarTrigger />
         </div>
       {messages.length === 0 ? (
