@@ -25,7 +25,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className={cn('font-body antialiased', 'min-h-screen')}>
+      <body className={cn('font-body antialiased', 'bg-muted/40')}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
