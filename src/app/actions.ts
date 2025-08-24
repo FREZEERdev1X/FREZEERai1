@@ -7,16 +7,20 @@ const submitMessageInput = z.object({
   prompt: z.string(),
 });
 
-export async function submitMessage(input: GenerateResponseInput) {
+export async function submitMessage(input: GenerateResponseInput): Promise<{ response?: string; error?: string }> {
   const parsedInput = submitMessageInput.safeParse(input);
   if (!parsedInput.success) {
-    // This should not happen with client-side validation but is good practice.
-    throw new Error('Invalid input');
+    console.error('Invalid input:', parsedInput.error);
+    return { error: 'Invalid input' };
   }
 
   try {
     const result = await generateResponse({ prompt: parsedInput.data.prompt });
-    return { response: result.response };
+    if (result?.response) {
+      return { response: result.response };
+    }
+    // If result or result.response is null/undefined, throw an error to be caught below.
+    throw new Error('Received an empty response from the AI.');
   } catch (error) {
     console.error('Error generating AI response:', error);
     return { error: 'Failed to get a response from the AI.' };

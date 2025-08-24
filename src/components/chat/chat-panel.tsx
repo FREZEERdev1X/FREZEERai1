@@ -16,19 +16,22 @@ export function ChatPanel() {
 
   const handleMessageSubmit = async (prompt: string) => {
     setIsLoading(true);
-    setMessages((prev) => [...prev, { role: 'user', content: prompt }]);
+    const newMessages: ChatMessageProps[] = [...messages, { role: 'user', content: prompt }];
+    setMessages(newMessages);
 
     try {
       const result = await submitMessage({ prompt });
+      
       if (result.response) {
         setMessages((prev) => [
           ...prev,
           { role: 'assistant', content: result.response },
         ]);
       } else {
-        throw new Error('No response from AI');
+        throw new Error(result.error || 'No response from AI');
       }
     } catch (error) {
+      console.error(error);
       toast({
         variant: 'destructive',
         title: translations.errorTitle,

@@ -42,6 +42,11 @@ const generateResponseFlow = ai.defineFlow(
   },
   async input => {
     const {output} = await generateResponsePrompt(input);
-    return output!;
+    
+    if (!output) {
+      throw new Error('AI failed to generate a response.');
+    }
+
+    return output;
   }
 );
