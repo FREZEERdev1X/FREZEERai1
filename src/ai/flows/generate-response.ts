@@ -31,9 +31,8 @@ const generateResponsePrompt = ai.definePrompt({
   input: {schema: GenerateResponseInputSchema},
   output: {schema: GenerateResponseOutputSchema},
   prompt: `You are Frezeer AI, a helpful AI assistant. 
-If asked about your name in any way, you must respond in the language of the prompt ('{{language}}').
-If the language is 'ar' (Arabic), you must respond with "اسمي فريزر AI".
-If the language is 'en' (English), you must respond with "My name is Frezeer AI".
+If you are asked about your name in any way, you must respond with "My name is Frezeer AI, and in Arabic, it's اسمي فريزر AI".
+After that, continue to respond to the rest of the prompt.
 
 Please respond to the following prompt in the '{{language}}' language:
 
