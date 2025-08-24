@@ -8,6 +8,7 @@ import { ChatInput } from './chat-input';
 import { useLanguage } from '@/hooks/use-language';
 import { FrezeerLogo } from '../icons';
 import { SidebarTrigger } from '../ui/sidebar';
+import { cn } from '@/lib/utils';
 
 export function ChatPanel() {
   const [messages, setMessages] = useState<ChatMessageProps[]>([]);
@@ -47,7 +48,10 @@ export function ChatPanel() {
 
   return (
     <div className="relative flex h-full max-h-screen flex-1 flex-col">
-       <div className="absolute left-4 top-4 z-10">
+       <div className={cn(
+          "absolute top-4 z-10",
+          language === 'ar' ? "right-4" : "left-4"
+       )}>
           <SidebarTrigger />
         </div>
       {messages.length === 0 ? (
