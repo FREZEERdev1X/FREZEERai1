@@ -41,12 +41,19 @@ const generateResponseFlow = ai.defineFlow(
     outputSchema: GenerateResponseOutputSchema,
   },
   async input => {
-    const {output} = await generateResponsePrompt(input);
+    try {
+      const {output} = await generateResponsePrompt(input);
     
-    if (!output) {
-      throw new Error('AI failed to generate a response.');
-    }
+      if (!output?.response) {
+        throw new Error('AI failed to generate a valid response.');
+      }
 
-    return output;
+      return output;
+
+    } catch (error) {
+      console.error('Error in generateResponseFlow:', error);
+      // Re-throw a more generic error to be handled by the action layer.
+      throw new Error('An unexpected error occurred while generating the AI response.');
+    }
   }
 );
