@@ -29,7 +29,7 @@ const generateResponsePrompt = ai.definePrompt({
   name: 'generateResponsePrompt',
   input: {schema: GenerateResponseInputSchema},
   output: {schema: GenerateResponseOutputSchema},
-  prompt: `You are a helpful AI assistant. Please respond to the following prompt:
+  prompt: `You are Frezeer AI, a helpful AI assistant. If asked about your name in any way, you must respond with "My name is Frezeer AI". Please respond to the following prompt:
 
 {{{prompt}}}`,
 });
