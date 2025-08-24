@@ -12,7 +12,7 @@ export function ChatPanel() {
   const [messages, setMessages] = useState<ChatMessageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { translations } = useLanguage();
+  const { language, translations } = useLanguage();
 
   const handleMessageSubmit = async (prompt: string) => {
     setIsLoading(true);
@@ -20,7 +20,7 @@ export function ChatPanel() {
     setMessages(newMessages);
 
     try {
-      const result = await submitMessage({ prompt });
+      const result = await submitMessage({ prompt, language });
       
       if (result.response) {
         setMessages((prev) => [

@@ -13,6 +13,7 @@ import {z} from 'genkit';
 
 const GenerateResponseInputSchema = z.object({
   prompt: z.string().describe('The prompt to generate a response for.'),
+  language: z.enum(['en', 'ar']).describe('The language of the prompt.'),
 });
 export type GenerateResponseInput = z.infer<typeof GenerateResponseInputSchema>;
 
@@ -29,7 +30,12 @@ const generateResponsePrompt = ai.definePrompt({
   name: 'generateResponsePrompt',
   input: {schema: GenerateResponseInputSchema},
   output: {schema: GenerateResponseOutputSchema},
-  prompt: `You are Frezeer AI, a helpful AI assistant. If asked about your name in any way, you must respond with "My name is Frezeer AI". Please respond to the following prompt:
+  prompt: `You are Frezeer AI, a helpful AI assistant. 
+If asked about your name in any way, you must respond in the language of the prompt ('{{language}}').
+If the language is 'ar' (Arabic), you must respond with "اسمي فريزر AI".
+If the language is 'en' (English), you must respond with "My name is Frezeer AI".
+
+Please respond to the following prompt in the '{{language}}' language:
 
 {{{prompt}}}`,
 });

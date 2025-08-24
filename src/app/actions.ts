@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 const submitMessageInput = z.object({
   prompt: z.string(),
+  language: z.enum(['en', 'ar']),
 });
 
 export async function submitMessage(input: GenerateResponseInput): Promise<{ response?: string; error?: string }> {
@@ -15,7 +16,10 @@ export async function submitMessage(input: GenerateResponseInput): Promise<{ res
   }
 
   try {
-    const result = await generateResponse({ prompt: parsedInput.data.prompt });
+    const result = await generateResponse({ 
+      prompt: parsedInput.data.prompt,
+      language: parsedInput.data.language,
+    });
     if (result?.response) {
       return { response: result.response };
     }
