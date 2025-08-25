@@ -9,8 +9,12 @@ import {
 } from '@/components/ui/sidebar';
 import { useLanguage } from '@/hooks/use-language';
 import { useAuth } from '@/contexts/auth-context';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Bot, Image as ImageIcon } from 'lucide-react';
+import { ImagePanel } from '@/components/image/image-panel';
+
 
 export default function Home() {
   const { language } = useLanguage();
@@ -35,7 +39,20 @@ export default function Home() {
       </Sidebar>
       <SidebarInset>
         <main className="flex h-full flex-1 flex-col">
-          <ChatPanel />
+          <Tabs defaultValue="chat" className="flex flex-1 flex-col">
+            <div className="flex justify-center p-2">
+              <TabsList>
+                <TabsTrigger value="chat"><Bot className="mr-2 h-4 w-4" />Chat</TabsTrigger>
+                <TabsTrigger value="image"><ImageIcon className="mr-2 h-4 w-4" />Image</TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="chat" className="flex-1">
+              <ChatPanel />
+            </TabsContent>
+            <TabsContent value="image" className="flex-1">
+              <ImagePanel />
+            </TabsContent>
+          </Tabs>
         </main>
       </SidebarInset>
     </SidebarProvider>

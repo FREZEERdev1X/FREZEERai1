@@ -1,6 +1,7 @@
 'use server';
 
 import { generateResponse, type GenerateResponseInput } from '@/ai/flows/generate-response';
+import { generateImage, type GenerateImageInput } from '@/ai/flows/generate-image';
 import { z } from 'zod';
 
 const submitMessageInput = z.object({
@@ -37,4 +38,25 @@ export async function submitMessage(input: z.infer<typeof submitMessageInput>): 
     const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
     return { error: `Failed to get a response from the AI: ${errorMessage}` };
   }
+}
+
+const submitImagePromptInput = z.object({
+    prompt: z.string(),
+});
+
+export async function submitImagePrompt(input: z.infer<typeof submitImagePromptInput>): Promise<{ imageUrl?: string; error?: string }> {
+    const parsedInput = submitImagePromptInput.safeParse(input);
+    if (!parsedInput.success) {
+        console.error('Invalid input:', parsedInput.error.flatten());
+        return { error: 'Invalid input provided.' };
+    }
+
+    try {
+        const result = await generateImage({ prompt: parsedInput.data.prompt });
+        return { imageUrl: result.imageUrl };
+    } catch (error) {
+        console.error('Error generating AI image in action:', error);
+        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+        return { error: `Failed to get a response from the AI: ${errorMessage}` };
+    }
 }

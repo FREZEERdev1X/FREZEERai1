@@ -89,7 +89,7 @@ export function ChatPanel() {
         <ChatMessages messages={messages} isLoading={isLoading} />
       )}
       
-      <div className="sticky bottom-0 z-10 w-full bg-gradient-to-t from-background via-background/80 to-transparent">
+      <div className="w-full bg-gradient-to-t from-background via-background/80 to-transparent">
         <div className="container mx-auto max-w-3xl px-4 pb-4 pt-2">
           <ChatInput onSubmit={handleMessageSubmit} isLoading={isLoading} />
         </div>
