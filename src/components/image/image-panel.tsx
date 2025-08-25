@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -8,8 +9,7 @@ import { submitImagePrompt } from '@/app/actions';
 import { FrezeerLogo } from '../icons';
 import { Card, CardContent } from '../ui/card';
 import Image from 'next/image';
-import { Skeleton } from '../ui/skeleton';
-import { Wand2 } from 'lucide-react';
+import { Wand2, Download } from 'lucide-react';
 import { useLanguage } from '@/hooks/use-language';
 
 
@@ -48,6 +48,16 @@ export function ImagePanel() {
       setIsLoading(false);
     }
   };
+
+  const handleDownload = () => {
+    if (!imageUrl) return;
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = `frezeer-ai-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 
   return (
     <div className="flex h-full flex-col items-center justify-between p-4">
@@ -88,7 +98,7 @@ export function ImagePanel() {
                 </CardContent>
             </Card>
         </div>
-        <div className="w-full max-w-2xl">
+        <div className="w-full max-w-2xl space-y-4">
           <div className="relative">
             <Textarea
               value={prompt}
@@ -104,15 +114,23 @@ export function ImagePanel() {
                 }
               }}
             />
-            <Button
-              onClick={handlePromptSubmit}
-              disabled={isLoading || !prompt.trim()}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full"
-            >
-              <Wand2 className="mr-2 h-4 w-4" />
-              Generate
-            </Button>
+             <Button
+                onClick={handlePromptSubmit}
+                disabled={isLoading || !prompt.trim()}
+                className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full"
+              >
+                <Wand2 className="mr-2 h-4 w-4" />
+                {translations.generateButton}
+              </Button>
           </div>
+          {imageUrl && !isLoading && (
+              <div className="flex justify-center animate-in fade-in">
+                <Button onClick={handleDownload}>
+                    <Download className="mr-2 h-4 w-4" />
+                    {translations.downloadButton}
+                </Button>
+              </div>
+          )}
         </div>
       </div>
     </div>

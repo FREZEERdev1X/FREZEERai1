@@ -1,3 +1,4 @@
+
 export type Language = 'en' | 'ar';
 
 export type Translations = {
@@ -30,6 +31,10 @@ export type Translations = {
   invalidEmailError: string;
   passwordLengthError: string;
   nameRequiredError: string;
+
+  // Image Panel
+  generateButton: string;
+  downloadButton: string;
 };
 
 export const translations: Record<Language, Translations> = {
@@ -63,6 +68,10 @@ export const translations: Record<Language, Translations> = {
     invalidEmailError: 'Please enter a valid email address.',
     passwordLengthError: 'Password must be at least 6 characters long.',
     nameRequiredError: 'Name is a required field.',
+
+    // Image Panel
+    generateButton: 'Generate',
+    downloadButton: 'Download Image',
   },
   ar: {
     appName: 'فريزر AI',
@@ -94,5 +103,9 @@ export const translations: Record<Language, Translations> = {
     invalidEmailError: 'الرجاء إدخال عنوان بريد إلكتروني صالح.',
     passwordLengthError: 'يجب أن تكون كلمة المرور 6 أحرف على الأقل.',
     nameRequiredError: 'الاسم حقل مطلوب.',
+    
+    // Image Panel
+    generateButton: 'توليد',
+    downloadButton: 'تحميل الصورة',
   },
 };
