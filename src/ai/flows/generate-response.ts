@@ -54,11 +54,7 @@ Follow these instructions carefully:
 Conversation History:
 {{#if history}}
   {{#each history}}
-    {{#if (eq role 'user')}}
-User: {{{content}}}
-    {{else}}
-Assistant: {{{content}}}
-    {{/if}}
+    {{role}}: {{{content}}}
   {{/each}}
 {{else}}
   No conversation history yet.
