@@ -59,7 +59,7 @@ export function AppSidebar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="absolute right-1 top-1/5 h-7 w-7 opacity-0 group-hover/menu-item:opacity-100"
+                                className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 opacity-0 group-hover/menu-item:opacity-100"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     deleteChat(chat.id);
