@@ -14,10 +14,15 @@ import {z} from 'genkit';
 const GenerateResponseInputSchema = z.object({
   prompt: z.string().describe('The prompt to generate a response for.'),
   language: z.enum(['en', 'ar']).describe('The language of the prompt.'),
-  history: z.array(z.object({
-    role: z.enum(['user', 'assistant']),
-    content: z.string(),
-  })).optional().describe('The conversation history.'),
+  history: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'assistant']),
+        content: z.string(),
+      })
+    )
+    .optional()
+    .describe('The conversation history.'),
 });
 export type GenerateResponseInput = z.infer<typeof GenerateResponseInputSchema>;
 
@@ -26,7 +31,9 @@ const GenerateResponseOutputSchema = z.object({
 });
 export type GenerateResponseOutput = z.infer<typeof GenerateResponseOutputSchema>;
 
-export async function generateResponse(input: GenerateResponseInput): Promise<GenerateResponseOutput> {
+export async function generateResponse(
+  input: GenerateResponseInput
+): Promise<GenerateResponseOutput> {
   return generateResponseFlow(input);
 }
 
@@ -72,16 +79,17 @@ const generateResponseFlow = ai.defineFlow(
     inputSchema: GenerateResponseInputSchema,
     outputSchema: GenerateResponseOutputSchema,
   },
-  async input => {
+  async (input) => {
     try {
       const {output} = await generateResponsePrompt(input);
-    
+
       if (!output?.response) {
-        throw new Error('AI failed to generate a valid response. The output was empty.');
+        throw new Error(
+          'AI failed to generate a valid response. The output was empty.'
+        );
       }
 
       return output;
-
     } catch (error) {
       console.error('Error in generateResponseFlow:', error);
       // Re-throw the error so the calling action can handle it.
