@@ -35,9 +35,12 @@ const generateImageFlow = ai.defineFlow(
   },
   async (input) => {
     try {
+      // Append the watermark instruction to the user's prompt
+      const watermarkedPrompt = `${input.prompt}. The image should have a discreet watermark in the bottom-right corner with the text "Frezeer AI".`;
+
       const {media} = await ai.generate({
         model: 'googleai/gemini-2.0-flash-preview-image-generation',
-        prompt: input.prompt,
+        prompt: watermarkedPrompt,
         config: {
           responseModalities: ['TEXT', 'IMAGE'],
         },
