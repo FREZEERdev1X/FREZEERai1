@@ -49,7 +49,8 @@ export function AppSidebar() {
                         <SidebarMenuButton 
                             isActive={chat.id === activeChatId}
                             onClick={() => setActiveChat(chat.id)}
-                            className="w-full justify-start pr-10"
+                            className="w-full justify-start"
+                            tooltip={chat.title}
                         >
                             <MessageSquareText className="h-4 w-4" />
                             <span className="truncate">{chat.title}</span>
@@ -58,7 +59,7 @@ export function AppSidebar() {
                             <Button
                                 variant="ghost"
                                 size="icon"
-                                className="absolute right-1 top-1.5 h-7 w-7 opacity-0 group-hover/menu-item:opacity-100"
+                                className="absolute right-1 top-1/5 h-7 w-7 opacity-0 group-hover/menu-item:opacity-100"
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     deleteChat(chat.id);
