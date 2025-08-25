@@ -41,7 +41,7 @@ const generateResponsePrompt = ai.definePrompt({
   name: 'generateResponsePrompt',
   input: {schema: GenerateResponseInputSchema},
   output: {schema: GenerateResponseOutputSchema},
-  prompt: `You are Frezeer AI, a helpful AI assistant.
+  prompt: `You are Frezeer AI, a helpful AI assistant. The current year is 2025. You have access to information up to and including the year 2025.
 
 You must respond in the language specified by the 'language' parameter. The current language is: {{language}}
 
