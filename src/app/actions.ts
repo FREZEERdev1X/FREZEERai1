@@ -15,8 +15,8 @@ const submitMessageInput = z.object({
 export async function submitMessage(input: z.infer<typeof submitMessageInput>): Promise<{ response?: string; error?: string }> {
   const parsedInput = submitMessageInput.safeParse(input);
   if (!parsedInput.success) {
-    console.error('Invalid input:', parsedInput.error);
-    return { error: 'Invalid input' };
+    console.error('Invalid input:', parsedInput.error.flatten());
+    return { error: 'Invalid input provided.' };
   }
 
   try {
@@ -25,13 +25,16 @@ export async function submitMessage(input: z.infer<typeof submitMessageInput>): 
       language: parsedInput.data.language,
       history: parsedInput.data.history,
     });
-    if (result?.response) {
-      return { response: result.response };
-    }
-    // If result or result.response is null/undefined, throw an error to be caught below.
-    throw new Error('Received an empty response from the AI.');
+    
+    // The flow now handles the check for a valid response.
+    // If it throws, the catch block below will handle it.
+    return { response: result.response };
+
   } catch (error) {
-    console.error('Error generating AI response:', error);
-    return { error: 'Failed to get a response from the AI.' };
+    console.error('Error generating AI response in action:', error);
+    // Return a structured error message. The UI will handle displaying it.
+    // Check if the error is an instance of Error to safely access the message property.
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred.';
+    return { error: `Failed to get a response from the AI: ${errorMessage}` };
   }
 }

@@ -21,8 +21,8 @@ export function ChatPanel() {
     const newMessages: ChatMessageProps[] = [...messages, { role: 'user', content: prompt }];
     setMessages(newMessages);
 
-    // Prepare history by removing the last user message (the current prompt)
-    const history = newMessages.slice(0, -1);
+    // Pass the history of messages *before* the new user message.
+    const history = messages;
 
     try {
       const result = await submitMessage({ prompt, language, history });
@@ -32,17 +32,23 @@ export function ChatPanel() {
           ...prev,
           { role: 'assistant', content: result.response },
         ]);
+      } else if (result.error) {
+        // This 'else if' block will now handle the error from the action
+        throw new Error(result.error);
       } else {
-        throw new Error(result.error || 'No response from AI');
+        // Fallback for unexpected cases
+        throw new Error('No response or error from AI');
       }
     } catch (error) {
       console.error(error);
+      const description = error instanceof Error ? error.message : translations.errorMessage;
       toast({
         variant: 'destructive',
         title: translations.errorTitle,
-        description: translations.errorMessage,
+        description: description,
       });
-      // remove the user message that caused the error
+      // CRITICAL: Remove the user's message that caused the error to prevent
+      // it from being re-sent with the next message.
       setMessages((prev) => prev.slice(0, prev.length -1));
     } finally {
       setIsLoading(false);

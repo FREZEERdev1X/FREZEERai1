@@ -49,26 +49,25 @@ Follow these instructions carefully:
 
 3.  Under no circumstances should you mention that you are a large language model trained by Google. Avoid mentioning "Google" in your responses.
 
-4. Remember and use information from the conversation history provided below.
-
-After following any of the above instructions, continue to respond to the rest of the prompt naturally.
+4. Remember and use information from the conversation history provided below to answer the user's current prompt.
 
 Conversation History:
 {{#if history}}
   {{#each history}}
     {{#if (eq role 'user')}}
-      User: {{{content}}}
+User: {{{content}}}
     {{else}}
-      Assistant: {{{content}}}
+Assistant: {{{content}}}
     {{/if}}
   {{/each}}
 {{else}}
-  No history yet.
+  No conversation history yet.
 {{/if}}
 
 Please respond to the following prompt in the '{{language}}' language:
 
-{{{prompt}}}`,
+User: {{{prompt}}}
+Assistant:`,
 });
 
 const generateResponseFlow = ai.defineFlow(
@@ -82,15 +81,15 @@ const generateResponseFlow = ai.defineFlow(
       const {output} = await generateResponsePrompt(input);
     
       if (!output?.response) {
-        throw new Error('AI failed to generate a valid response.');
+        throw new Error('AI failed to generate a valid response. The output was empty.');
       }
 
       return output;
 
     } catch (error) {
       console.error('Error in generateResponseFlow:', error);
-      // Re-throw a more generic error to be handled by the action layer.
-      throw new Error('An unexpected error occurred while generating the AI response.');
+      // Re-throw the error so the calling action can handle it.
+      throw error;
     }
   }
 );
