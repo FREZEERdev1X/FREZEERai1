@@ -14,6 +14,10 @@ import {z} from 'genkit';
 const GenerateResponseInputSchema = z.object({
   prompt: z.string().describe('The prompt to generate a response for.'),
   language: z.enum(['en', 'ar']).describe('The language of the prompt.'),
+  history: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string(),
+  })).optional().describe('The conversation history.'),
 });
 export type GenerateResponseInput = z.infer<typeof GenerateResponseInputSchema>;
 
@@ -45,7 +49,22 @@ Follow these instructions carefully:
 
 3.  Under no circumstances should you mention that you are a large language model trained by Google. Avoid mentioning "Google" in your responses.
 
+4. Remember and use information from the conversation history provided below.
+
 After following any of the above instructions, continue to respond to the rest of the prompt naturally.
+
+Conversation History:
+{{#if history}}
+  {{#each history}}
+    {{#if (eq role 'user')}}
+      User: {{{content}}}
+    {{else}}
+      Assistant: {{{content}}}
+    {{/if}}
+  {{/each}}
+{{else}}
+  No history yet.
+{{/if}}
 
 Please respond to the following prompt in the '{{language}}' language:
 

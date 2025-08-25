@@ -6,9 +6,13 @@ import { z } from 'zod';
 const submitMessageInput = z.object({
   prompt: z.string(),
   language: z.enum(['en', 'ar']),
+  history: z.array(z.object({
+    role: z.enum(['user', 'assistant']),
+    content: z.string(),
+  })).optional(),
 });
 
-export async function submitMessage(input: GenerateResponseInput): Promise<{ response?: string; error?: string }> {
+export async function submitMessage(input: z.infer<typeof submitMessageInput>): Promise<{ response?: string; error?: string }> {
   const parsedInput = submitMessageInput.safeParse(input);
   if (!parsedInput.success) {
     console.error('Invalid input:', parsedInput.error);
@@ -19,6 +23,7 @@ export async function submitMessage(input: GenerateResponseInput): Promise<{ res
     const result = await generateResponse({ 
       prompt: parsedInput.data.prompt,
       language: parsedInput.data.language,
+      history: parsedInput.data.history,
     });
     if (result?.response) {
       return { response: result.response };

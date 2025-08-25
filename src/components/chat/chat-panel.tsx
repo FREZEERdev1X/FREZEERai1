@@ -21,8 +21,11 @@ export function ChatPanel() {
     const newMessages: ChatMessageProps[] = [...messages, { role: 'user', content: prompt }];
     setMessages(newMessages);
 
+    // Prepare history by removing the last user message (the current prompt)
+    const history = newMessages.slice(0, -1);
+
     try {
-      const result = await submitMessage({ prompt, language });
+      const result = await submitMessage({ prompt, language, history });
       
       if (result.response) {
         setMessages((prev) => [
