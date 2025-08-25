@@ -4,6 +4,8 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { LanguageProvider } from '@/contexts/language-context';
 import { Toaster } from '@/components/ui/toaster';
 import { cn } from '@/lib/utils';
+import { AuthProvider } from '@/contexts/auth-context';
+import { ChatProvider } from '@/contexts/chat-context';
 
 export const metadata: Metadata = {
   title: 'Frezeer AI',
@@ -33,8 +35,12 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LanguageProvider>
-            {children}
-            <Toaster />
+            <AuthProvider>
+              <ChatProvider>
+                {children}
+                <Toaster />
+              </ChatProvider>
+            </AuthProvider>
           </LanguageProvider>
         </ThemeProvider>
       </body>

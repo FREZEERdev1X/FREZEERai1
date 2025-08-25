@@ -8,9 +8,25 @@ import {
   SidebarProvider,
 } from '@/components/ui/sidebar';
 import { useLanguage } from '@/hooks/use-language';
+import { useAuth } from '@/contexts/auth-context';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const { language } = useLanguage();
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [user, router]);
+
+  if (!user) {
+    // You can show a loading spinner here
+    return null;
+  }
 
   return (
     <SidebarProvider>

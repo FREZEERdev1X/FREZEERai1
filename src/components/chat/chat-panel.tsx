@@ -9,34 +9,44 @@ import { useLanguage } from '@/hooks/use-language';
 import { FrezeerLogo } from '../icons';
 import { SidebarTrigger } from '../ui/sidebar';
 import { cn } from '@/lib/utils';
+import { useChat } from '@/contexts/chat-context';
 
 export function ChatPanel() {
-  const [messages, setMessages] = useState<ChatMessageProps[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const { language, translations } = useLanguage();
+  const { activeChat, updateChat } = useChat();
 
   const handleMessageSubmit = async (prompt: string) => {
-    setIsLoading(true);
-    const newMessages: ChatMessageProps[] = [...messages, { role: 'user', content: prompt }];
-    setMessages(newMessages);
+    if (!activeChat) return;
 
-    // Pass the history of messages *before* the new user message.
-    const history = messages;
+    setIsLoading(true);
+    const userMessage: ChatMessageProps = { role: 'user', content: prompt };
+    const updatedMessages = [...activeChat.messages, userMessage];
+    
+    // Optimistically update UI
+    updateChat(activeChat.id, { messages: updatedMessages });
+
+    const history = activeChat.messages;
 
     try {
       const result = await submitMessage({ prompt, language, history });
       
       if (result.response) {
-        setMessages((prev) => [
-          ...prev,
-          { role: 'assistant', content: result.response },
-        ]);
+        const assistantMessage: ChatMessageProps = { role: 'assistant', content: result.response };
+        const finalMessages = [...updatedMessages, assistantMessage];
+        let chatTitle = activeChat.title;
+
+        // If this is the first real message, set the chat title
+        if (activeChat.messages.length === 0) {
+            chatTitle = prompt.substring(0, 30);
+        }
+
+        updateChat(activeChat.id, { messages: finalMessages, title: chatTitle });
+
       } else if (result.error) {
-        // This 'else if' block will now handle the error from the action
         throw new Error(result.error);
       } else {
-        // Fallback for unexpected cases
         throw new Error('No response or error from AI');
       }
     } catch (error) {
@@ -47,13 +57,14 @@ export function ChatPanel() {
         title: translations.errorTitle,
         description: description,
       });
-      // CRITICAL: Remove the user's message that caused the error to prevent
-      // it from being re-sent with the next message.
-      setMessages((prev) => prev.slice(0, prev.length -1));
+      // CRITICAL: Revert optimistic update on error
+      updateChat(activeChat.id, { messages: activeChat.messages });
     } finally {
       setIsLoading(false);
     }
   };
+  
+  const messages = activeChat ? activeChat.messages : [];
 
   return (
     <div className="relative flex h-full max-h-screen flex-1 flex-col">
