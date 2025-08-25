@@ -22,7 +22,10 @@ export function ChatPanel() {
 
     setIsLoading(true);
     const userMessage: ChatMessageProps = { role: 'user', content: prompt };
-    const updatedMessages = [...activeChat.messages, userMessage];
+    
+    // Create a new array for messages to avoid mutation
+    const currentMessages = activeChat.messages || [];
+    const updatedMessages = [...currentMessages, userMessage];
     
     // Optimistically update UI
     updateChat(activeChat.id, { messages: updatedMessages });
@@ -35,10 +38,10 @@ export function ChatPanel() {
       if (result.response) {
         const assistantMessage: ChatMessageProps = { role: 'assistant', content: result.response };
         const finalMessages = [...updatedMessages, assistantMessage];
+        
         let chatTitle = activeChat.title;
-
-        // If this is the first real message, set the chat title
-        if (activeChat.messages.length === 0) {
+        // If this is the first real message, set the chat title from the prompt
+        if (currentMessages.length === 0 && prompt) {
             chatTitle = prompt.substring(0, 30);
         }
 
@@ -57,8 +60,8 @@ export function ChatPanel() {
         title: translations.errorTitle,
         description: description,
       });
-      // CRITICAL: Revert optimistic update on error
-      updateChat(activeChat.id, { messages: activeChat.messages });
+      // CRITICAL: Revert optimistic update on error by restoring the original messages
+      updateChat(activeChat.id, { messages: currentMessages });
     } finally {
       setIsLoading(false);
     }
